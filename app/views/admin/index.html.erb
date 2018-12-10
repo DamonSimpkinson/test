@@ -1,0 +1,160 @@
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin - PBIS</title>
+
+</head>
+
+<body>
+    <%= content_tag :div, "", id: "week_events", data:{behaviors: @weekData}%>
+     <%= content_tag :div, "", id: "month_events", data:{behaviors: @monthData}%>
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <%= render 'menu' %>
+
+        <div id="" class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Dashboard</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div> 
+            <!-- /.row -->
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Events This Week
+                        </div>
+                       
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                           
+                           
+                            <div id="eventByWeek" style="height: 250px;"></div>
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>                    
+                </div>
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Recent Events
+                        </div>
+                        <!-- /.panel-heading -->
+                        <table width="100%" class="table table-striped table-bordered table-hover table-condensed" id="recentEvents">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <% @recentEvents.each do |behave| %> 
+                                    <tr>
+                                      <td><%= behave.student_name%></td>
+                                      <td><%= behave.event_date %></td>
+                                      <td><%= behave.readable_time %></td>
+                                      <td><%= link_to 'Show', behavior_path(behave) %></td>
+                                    </tr>
+                                  <% end %>
+                                </tbody>                               
+                            </table>
+                            <!-- /.table-responsive -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Events By Month
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="eventByMonth" style="height: 250px;"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Frequent Behaviors
+                            <table width="100%" class="table table-striped table-bordered table-hover table-condensed" id="recentEvents">
+                                <thead>
+                                    <tr>
+                                       <th># Events</th>
+                                       <th>Name</th>
+                                       <th>View</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    
+                                    <% @highFliers.each do |s| %> 
+                                    <tr>
+                                      <td><%= s.count %></td>
+                                      <td><%= s.student_name %></td>
+                                      <td><%= link_to 'View', student_path(s.student_id) %></td>
+                                    </tr>
+                                  <% end %>
+                                </tbody>                               
+                            </table>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-heading -->
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    
+    <!-- /#wrapper -->
+
+    <!-- Charts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    <script type="text/javascript">
+        new Morris.Bar({
+            element: 'eventByMonth',
+            data: $('#month_events').data('behaviors'),
+            xkey: 'event_date',
+            ykeys: ['count'],
+            labels: ['Events'],
+            resize: true
+        });
+        new Morris.Bar({
+            element: 'eventByWeek',
+            data: $('#week_events').data('behaviors'),
+            xkey: 'event_date',
+            ykeys: ['count'],
+            labels: ['Events'],
+            resize: true
+        });
+        
+        
+    </script>
+    
+
+</body>
